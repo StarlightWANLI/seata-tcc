@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.tedu.account.mapper.AccountMapper" >
+    <resultMap id="BaseResultMap" type="cn.tedu.account.entity.Account" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="total" property="total" jdbcType="DECIMAL" />
+        <result column="used" property="used" jdbcType="DECIMAL" />
+        <result column="residue" property="residue" jdbcType="DECIMAL"/>
+        <result column="frozen" property="frozen" jdbcType="DECIMAL"/>
+    </resultMap>
+    <update id="decrease">
+      UPDATE account SET residue = residue - #{money},used = used + #{money} where user_id = #{userId};
+    </update>
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM account WHERE `user_id`=#{userId}
+    </select>
+
+    <update id="updateFrozen">
+        UPDATE account SET `residue`=#{residue},`frozen`=#{frozen} WHERE `user_id`=#{userId}
+    </update>
+
+    <update id="updateFrozenToUsed">
+        UPDATE account SET `frozen`=`frozen`-#{money}, `used`=`used`+#{money} WHERE `user_id`=#{userId}
+    </update>
+
+    <update id="updateFrozenToResidue">
+        UPDATE account SET `frozen`=`frozen`-#{money}, `residue`=`residue`+#{money} WHERE `user_id`=#{userId}
+    </update>
+</mapper>

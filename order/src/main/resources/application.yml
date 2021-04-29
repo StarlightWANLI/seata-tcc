@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: order
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seata_order?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+
+
+#seata:
+#  enabled: true
+#  tx-service-group: default
+#  service:
+#    vgroup-mapping:
+#      default: default
+#    grouplist:
+#      default: 127.0.0.1:8091
+
+  # 事务组设置  ,对应file.conf文件中vgroupMapping.order_tx_group后面的值。
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+mybatis-plus:
+  type-aliases-package: cn.tedu.sdorder.entity
+  mapper-locations:
+    - classpath:/mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    cn.tedu.order.mapper: DEBUG
+
+ribbon:
+  ReadTimeout: 10000
+
+
+seata:
+  enabled: true
+  tx-service-group: order_tx_group
+  service:
+    vgroup-mapping:
+     order_tx_group: seata-server
+    grouplist:
+      seata-server: 127.0.0.1:8091
+
+
+
+
+
